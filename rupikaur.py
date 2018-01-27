@@ -6,6 +6,7 @@ def clean_file(text):
 	file = open(text, "r+")
 	file_data = file.read()
 	file_data = re.sub(" +", " ", file_data).lstrip()
+	file_data = file_data.replace("-","")
 	file.seek(0)
 	file.truncate()
 	file.write(file_data)
@@ -64,4 +65,16 @@ def poetry(max_length, texts):
 	chain = combine_markov(chains)
 	return make_poem(max_length, chain)
 
-print(poetry(20, ["rupis/" + file for file in os.listdir(os.getcwd()+"/rupis/")]))
+def get_pic():
+	photofile = random.choice(os.listdir("/Users/41562/Desktop/rupikaur/rupicursion"))
+	img_tag = '<img src="rupicursion/{0}">'.format(photofile)
+	return img_tag
+
+def make_html(poetry):
+	f = open('poetry.html','w')
+	poetry = poetry.replace("\n","<br/>")
+	text = "<html><body style=\"font-family:Times\"> "+poetry+"<p> - rupi kaur </p>"+get_pic()+"</body></html>"
+	f.write(text)
+	f.close()
+
+make_html(poetry(20, ["rupis/" + file for file in os.listdir(os.getcwd()+"/rupis/")]))
